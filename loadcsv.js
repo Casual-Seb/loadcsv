@@ -23,7 +23,7 @@ function readStream(
       data.push(chunk);
     });
 
-    const fix = () => {
+    const transformedData = () => {
       data = data.flat(1);
       let labels = extractColumns(data, labelColumns);
       data = extractColumns(data, dataColumns);
@@ -52,7 +52,7 @@ function readStream(
       }
     };
 
-    stream.on("end", () => resolve(fix()));
+    stream.on("end", () => resolve(transformedData()));
     stream.on("error", (error) => reject(error));
   });
 }
@@ -97,7 +97,6 @@ function extractColumns(data, columnNames) {
 }
 
 async function loadCSV(filename, options) {
-  console.log("calling");
   const result = await readStream(filename, options);
   const { features, labels, testFeatures, testLabels } = result;
 
@@ -110,9 +109,9 @@ async function loadCSV(filename, options) {
 loadCSV("data.csv", {
   dataColumns: ["height", "value"],
   labelColumns: ["passed"],
-  seed: "sdfsdf",
+  seed: "sdfsdfsd",
   shuffle: true,
-  splitTest: 2,
+  splitTest: 1,
   converters: {
     passed: (val) => (val === "TRUE" ? 1 : 0),
   },
